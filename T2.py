@@ -3,7 +3,7 @@ import csv
 from datetime import timedelta
 import datetime
 import os
-
+filter_column = 'Period after CO request'
 DateNow = datetime.datetime.now()
 day = DateNow.strftime("%d")
 month = DateNow.strftime("%b")
@@ -195,23 +195,23 @@ getPartners = []
 with open(current_date+"_Report.csv", 'w') as output:
 
     trade_writer = csv.writer(output, delimiter = ',')
-    trade_writer.writerow(['Index','CO Request ID','Creation Date','CO value Date', 'FX Deal No','Business Partner','Value Dt', 'Deal Amount', 'Currency', 'Period after CO request > 4 days','Value Dt - CO Value Dt','Trader' ] )
+    trade_writer.writerow(['Index','CO Request ID','Creation Date','CO value Date', 'FX Deal No','Business Partner', 'Deal Amount', 'Currency', filter_column, 'Trader' ] )
     j = 0
     for y in DealNumber:
 
         for x in usdIndex_get_DealNumbers:
-            if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 4):
+            if y == FX133TradeData[48][x]:# and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 4):
                 #index_in_HQ.append(j+y+FX133TradeData[3][x])
-                trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],TradeData[9][approved_index[j]],str(y),FX133TradeData[41][x],HqTradeData[8][j],"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],(HqTradeData[8][j]-HqTradeData[15][j]),(HqTradeData[8][j]-TradeData[9][approved_index[j]]),FX133TradeData[3][x] ])
+                trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],TradeData[9][approved_index[j]],str(y),FX133TradeData[41][x],"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],(HqTradeData[8][j]-HqTradeData[15][j]),FX133TradeData[3][x] ])
                 ALL_indices.append(j)
                 getPartners.append( FX133TradeData[41][x] )
 
 
         for x in EURIndex_get_DealNumbers:
-            if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 4):
+            if y == FX133TradeData[48][x]:# and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 4):
 
             #and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 0):
-                trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],TradeData[9][approved_index[j]],str(y),FX133TradeData[41][x],HqTradeData[8][j],"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],(HqTradeData[8][j]-HqTradeData[15][j]),(HqTradeData[8][j]-TradeData[9][approved_index[j]]),FX133TradeData[3][x] ])
+                trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],TradeData[9][approved_index[j]],str(y),FX133TradeData[41][x],"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],(HqTradeData[8][j]-HqTradeData[15][j]),FX133TradeData[3][x] ])
                 ALL_indices.append(j)
                 getPartners.append( FX133TradeData[41][x] )
                 #print(str(j)+' USD '+' '+str(y)+' '+FX133TradeData[3][x], HqTradeData[0][j], HqTradeData[7][j], HqTradeData[8][j], HqTradeData[9][j], HqTradeData[15][j],(HqTradeData[8][j]-HqTradeData[15][j]))
@@ -245,8 +245,9 @@ with open(current_date+"_Report.csv", 'w') as output:
 
         j+=1
 output.close()
-#for delete in files:
-#    os.remove('files/'+delete);
+for delete in files:
+
+    os.remove('files/'+delete);
 
 missing_indices = []
 for y in range( 0, (ALL_indices[-1] + 1) ):
