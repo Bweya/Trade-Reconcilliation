@@ -1,10 +1,33 @@
 import pandas as pd
 import csv
 from datetime import timedelta
+import datetime
+import os
 
-TradeData = pd.read_excel("files/FX Trades-01-31Oct19.xlsx", sheet_name = 0, header = None, skiprows=1)
-HqTradeData = pd.read_excel("files/FX Trades HQ-01-31Oct19.xlsx", sheet_name = 0, header = None, skiprows=1)
-FX133TradeData = pd.read_excel("files/FX Deals - 133Rpt-01-31Oct19.xls.xlsx", sheet_name = 0, header = None, skiprows=1)
+DateNow = datetime.datetime.now()
+day = DateNow.strftime("%d")
+month = DateNow.strftime("%b")
+year = DateNow.strftime("%Y")
+current_date = day + "_" + month + "_" + year
+
+files = os.listdir('files')
+
+for f in files:
+    if f[:10] == 'FX Trades-':
+        TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+    if f[:12] == 'FX Trades HQ':
+        HqTradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+    if f[:6] == 'FX-133':
+        FX133TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+
+
+#TradeData = pd.read_excel("files/FX Trades-01-30Nov19.XLSX", sheet_name = 0, header = None, skiprows=1)
+#HqTradeData = pd.read_excel("files/FX Trades HQ-01-30Nov19.XLSX", sheet_name = 0, header = None, skiprows=1)
+#FX133TradeData = pd.read_excel("files/FX-133 Rpt-01-30Nov19.xls.xlsx", sheet_name = 0, header = None, skiprows=1)
+
+#TradeData = pd.read_excel("files/FX Trades-01-31Oct19.XLSX", sheet_name = 0, header = None, skiprows=1)
+#HqTradeData = pd.read_excel("files/FX Trades HQ-01-31Oct19.XLSX", sheet_name = 0, header = None, skiprows=1)
+#FX133TradeData = pd.read_excel("files/FX Deals - 133Rpt-01-31Oct19.xls.xlsx", sheet_name = 0, header = None, skiprows=1)
 
 #Get indices of approved records
 
@@ -50,16 +73,20 @@ for x in get_FXhq_Index:
 #=======================EUR
 EURstart_index = 0
 for x in FX133TradeData[0]:
-    if isinstance(x, float) == False and x[:12] == 'EUR ( Euro )':
-        break
+    if isinstance(x, datetime.datetime) == False:
+
+        if isinstance(x, float) == False and x[:12] == 'EUR ( Euro )':
+            break
     EURstart_index+=1
 
 EURstop_index = 0
 
 for x in FX133TradeData[0]:
     if EURstop_index > EURstart_index:
-        if isinstance(x, float) == False and x[:14] == 'Total Currency':
-            break;
+        if isinstance(x, datetime.datetime) == False:
+
+            if isinstance(x, float) == False and x[:14] == 'Total Currency':
+                break
     EURstop_index+=1
 
 EURstart_index = EURstart_index + 1
@@ -81,16 +108,21 @@ for x in FX133TradeData[48]:
 #=======================USD
 USDstart_index = 0
 for x in FX133TradeData[0]:
-    if isinstance(x, float) == False and x[:17] == 'USD ( US Dollar )':
-        break
+    if isinstance(x, datetime.datetime) == False:
+
+        if isinstance(x, float) == False and x[:17] == 'USD ( US Dollar )':
+            break
     USDstart_index+=1
 
 USDstop_index = 0
 
 for x in FX133TradeData[0]:
     if USDstop_index > USDstart_index:
-        if isinstance(x, float) == False and x[:14] == 'Total Currency':
-            break;
+        if isinstance(x, datetime.datetime) == False:
+
+
+            if isinstance(x, float) == False and x[:14] == 'Total Currency':
+                break;
     USDstop_index+=1
 
 USDstart_index = USDstart_index + 1
@@ -160,15 +192,15 @@ for x in FX133TradeData[48]:
 #USD_dealers = []
 ALL_indices = []
 getPartners = []
-with open("Report.csv", 'w') as output:
+with open(current_date+"_Report.csv", 'w') as output:
 
     trade_writer = csv.writer(output, delimiter = ',')
-    trade_writer.writerow(['Index','CO Request ID','Creation Date','CO value Date', 'FX Deal No.','Business Partner','Value Dt', 'Deal Amount', 'Currency', 'Number of Days > 3','Value Dt - CO Value Dt','Trader' ] )
+    trade_writer.writerow(['Index','CO Request ID','Creation Date','CO value Date', 'FX Deal No','Business Partner','Value Dt', 'Deal Amount', 'Currency', 'Period after CO request > 4 days','Value Dt - CO Value Dt','Trader' ] )
     j = 0
     for y in DealNumber:
 
         for x in usdIndex_get_DealNumbers:
-            if y == FX133TradeData[48][x]:
+            if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 4):
                 #index_in_HQ.append(j+y+FX133TradeData[3][x])
                 trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],TradeData[9][approved_index[j]],str(y),FX133TradeData[41][x],HqTradeData[8][j],"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],(HqTradeData[8][j]-HqTradeData[15][j]),(HqTradeData[8][j]-TradeData[9][approved_index[j]]),FX133TradeData[3][x] ])
                 ALL_indices.append(j)
@@ -176,7 +208,7 @@ with open("Report.csv", 'w') as output:
 
 
         for x in EURIndex_get_DealNumbers:
-            if y == FX133TradeData[48][x]:
+            if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 4):
 
             #and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 0):
                 trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],TradeData[9][approved_index[j]],str(y),FX133TradeData[41][x],HqTradeData[8][j],"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],(HqTradeData[8][j]-HqTradeData[15][j]),(HqTradeData[8][j]-TradeData[9][approved_index[j]]),FX133TradeData[3][x] ])
@@ -213,16 +245,18 @@ with open("Report.csv", 'w') as output:
 
         j+=1
 output.close()
+#for delete in files:
+#    os.remove('files/'+delete);
 
 missing_indices = []
-for y in range( 0, len(ALL_indices) ):
+for y in range( 0, (ALL_indices[-1] + 1) ):
     if y not in ALL_indices:
         missing_indices.append(y)
 print('\n')
 print('Records missing equals: ',len(missing_indices))
 print ('See missing records below: ')
 for y in missing_indices:
-    print(HqTradeData[2][y], HqTradeData[7][y], "{:,}".format( HqTradeData[9][y] ), ' Creation date: ',HqTradeData[15][y], ' Value date: ',HqTradeData[8][y])
+    print('Missing index: ',y,'; Deal Number: ',HqTradeData[2][y], '; Currency: ',HqTradeData[7][y],'; Deal Amount: ', "{:,}".format( HqTradeData[9][y] ), '; Creation date: ',HqTradeData[15][y], '; Value date: ',HqTradeData[8][y])
 print('\n')
 
 x = getPartners
@@ -237,7 +271,6 @@ for p in getPartners:
 
 for x in dict:
     print(x, dict[x])
-
 
 
 
