@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import timedelta
 import datetime
 import os
-def trade_graph(d, themonth):
+def trade_graph(d, thedays, themonth):
 
     filter_column = 'Period after CO create date'
     DateNow = datetime.datetime.now()
@@ -183,35 +183,38 @@ def trade_graph(d, themonth):
                 total_transactions = total_transactions+dict[x]
 
             if day == 3:
-                print('["All FX Trades", ',total_transactions,', "grey", "',total_transactions,'"],',file = graph)
+                print('["All FX Trades", ',total_transactions,', "grey", "',"{:.0f}".format((total_transactions/total_transactions)*100)+"%",'"],',file = graph)
+                percent = total_transactions;
             if day == 4:
-                print('["greater than ',(day),' day", ',total_transactions,', "green", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 5:
-                print('["greater than ',(day),' days", ',total_transactions,', "green", "',total_transactions,'"],',file = graph)
+
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 6:
-                print('["greater than ',(day),' days", ',total_transactions,', "yellow", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 7:
-                print('["greater than ',(day),' days", ',total_transactions,', "yellow", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 8:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 9:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 10:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 11:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 12:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 13:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
             if day == 14:
-                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/percent)*100)+"%",'"],',file = graph)
 
 
         print(']);', file = graph)
         print('var options = {', file = graph)
         print("title: 'Number of Transactions',", file = graph)
-        print('width: 900,', file = graph)
+        print('height: 1000,', file = graph)
+        print('width: 1600,', file = graph)
         print("legend: { position: 'none' },", file = graph)
         print("bars: 'horizontal',", file = graph)
         print(' bar: { groupWidth: "90%" }', file = graph)
@@ -229,15 +232,26 @@ def trade_graph(d, themonth):
         print("font-family: 'Nanum Gothic', sans-serif;", file = graph)
         print("color:grey;", file = graph)
         print('}', file = graph)
+        print("td{ font-family: 'Nanum Gothic', sans-serif; }",file = graph)
+        print("strong{ font-family: 'Nanum Gothic', sans-serif; }",file = graph)
+
         print("</style>", file = graph)
         print("</head>", file = graph)
         print('<body>', file = graph)
-        print('<h2>UNICEF FOREX Trade Chart ',themonth,' 2019</h2>', file = graph)
-        print('<h3>Number of Trade Transactions </h3>', file = graph)
-        print('<div id="top_x_div" style="width: 900px; height: 500px;"></div>', file = graph)
+        print('<h2>FX Trades ',thedays, themonth,' 2019 Days Delivery To CO</h2>', file = graph)
+        #print('<h3>Days Delivery </h3>', file = graph)
+        print('<div id="top_x_div"></div>', file = graph)
+        print('<table style="border:none">', file = graph)
+        print('<tr><td><strong>Key</strong></td><td></td></tr>', file = graph)
+
+        print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:grey"></div></td><td>All FX Trades ',thedays, themonth,' 2019</td>',file = graph)
+        print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:green"></div></td><td>FX Trades delivered to CO within 5 days</td>',file = graph)
+
+        print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:red"></div></td><td>FX Trades delivered to CO after 5 days onwards</td>',file = graph)
+        print('</table>', file = graph)
         print('</body></html>', file = graph)
 
     graph.close()
-    #for delete in files:
+    for delete in files:
 
-        #os.remove('files/'+delete)
+        os.remove('files/'+delete)
