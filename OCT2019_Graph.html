@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang ='en' dir='ltr'>
+<head><meta charset="utf-8">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+<script type="text/javascript">
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawStuff);
+function drawStuff() {
+var data = new google.visualization.arrayToDataTable([
+['Days', 'Number of Transactions', {role:'style'}, {role : 'annotation'}],
+["All FX Trades",  176 , "grey", " 176 "],
+["greater than  4  day",  173 , "green", " 173 "],
+["greater than  5  days",  76 , "green", " 76 "],
+["greater than  6  days",  65 , "yellow", " 65 "],
+["greater than  7  days",  20 , "yellow", " 20 "],
+["greater than  8  days",  4 , "red", " 4 "],
+["greater than  9  days",  2 , "red", " 2 "],
+["greater than  10  days",  0 , "red", " 0 "],
+]);
+var options = {
+title: 'Number of Transactions',
+width: 900,
+legend: { position: 'none' },
+bars: 'horizontal',
+ bar: { groupWidth: "90%" }
+};
+var chart = new google.visualization.BarChart(document.getElementById('top_x_div'));
+chart.draw(data, options);
+};
+</script>
+<style type="text/css">
+h2{
+font-family: 'Nanum Gothic', sans-serif;
+color:black;
+}
+h3{
+font-family: 'Nanum Gothic', sans-serif;
+color:grey;
+}
+</style>
+</head>
+<body>
+<h2>UNICEF FOREX Trade Chart  OCT  2019</h2>
+<h3>Number of Trade Transactions </h3>
+<div id="top_x_div" style="width: 900px; height: 500px;"></div>
+</body></html>

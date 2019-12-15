@@ -196,14 +196,14 @@ def trade(d, themonth):
     with open(themonth+year+"_Report.csv", 'w') as output:
 
         trade_writer = csv.writer(output, delimiter = ',')
-        trade_writer.writerow(['Index','CO Request ID','Creation Date','FX Deal No','Deal Amount','Currency','Value Date', 'Business Partner', filter_column, 'Trader' ] )
+        trade_writer.writerow(['Index','CO Request ID','Creation Date','FX Deal No','Deal Amount','Currency','Value Date HQ', 'Business Partner', filter_column,'Average number of days not received by CO', 'Trader' ] )
         j = 0
         for y in DealNumber:
 
             for x in usdIndex_get_DealNumbers:
                 if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = d):
                     #index_in_HQ.append(j+y+FX133TradeData[3][x])
-                    trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),FX133TradeData[3][x] ])
+                    trade_writer.writerow([ HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),((HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
                     ALL_indices.append(j)
                     getPartners.append( FX133TradeData[41][x] )
 
@@ -212,16 +212,16 @@ def trade(d, themonth):
                 if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = d):
 
                 #and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 0):
-                    trade_writer.writerow([ str(j),HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),FX133TradeData[3][x] ])
+                    trade_writer.writerow([ HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),((HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
                     ALL_indices.append(j)
                     getPartners.append( FX133TradeData[41][x] )
 
 
             j+=1
     output.close()
-    for delete in files:
+    #for delete in files:
 
-        os.remove('files/'+delete);
+    #    os.remove('files/'+delete);
 
     missing_indices = []
     for y in range( 0, (ALL_indices[-1] + 1) ):
@@ -243,9 +243,12 @@ def trade(d, themonth):
             if p == q:
                 count+=1
         dict[p] = count
-
+    total_transactions = 0
     for x in dict:
         print(x, dict[x])
+        total_transactions = total_transactions+dict[x]
+    print('\n', 'The total number of transactions equals:',total_transactions)
+
 
 
 

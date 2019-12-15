@@ -2,9 +2,9 @@ import pandas as pd
 import csv
 from datetime import timedelta
 
-TradeData = pd.read_excel("files/FX Trades-01-31Oct19.xlsx", sheet_name = 0, header = None, skiprows=1)
-HqTradeData = pd.read_excel("files/FX Trades HQ-01-31Oct19.xlsx", sheet_name = 0, header = None, skiprows=1)
-FX133TradeData = pd.read_excel("files/FX Deals - 133Rpt-01-31Oct19.xlsx", sheet_name = 0, header = None, skiprows=1)
+TradeData = pd.read_excel("files/FX Trades-01-31Oct19.XLSX", sheet_name = 0, header = None, skiprows=1)
+HqTradeData = pd.read_excel("files/FX Trades HQ-01-31Oct19.XLSX", sheet_name = 0, header = None, skiprows=1)
+FX133TradeData = pd.read_excel("files/FX Deals - 133Rpt-01-31Oct19.xls.xlsx", sheet_name = 0, header = None, skiprows=1)
 
 #Get indices of approved records
 
@@ -90,7 +90,7 @@ USDstop_index = 0
 for x in FX133TradeData[0]:
     if USDstop_index > USDstart_index:
         if isinstance(x, float) == False and x[:14] == 'Total Currency':
-            break;
+            break
     USDstop_index+=1
 
 USDstart_index = USDstart_index + 1

@@ -12,6 +12,7 @@ def trade_graph(d, themonth):
     year = DateNow.strftime("%Y")
     current_period = month+year
 
+
     files = os.listdir('files')
 
     for f in files:
@@ -153,13 +154,13 @@ def trade_graph(d, themonth):
             for y in DealNumber:
 
                 for x in usdIndex_get_DealNumbers:
-                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = day):
+                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) > timedelta(days = day):
 
                         getPartners.append( FX133TradeData[41][x] )
 
 
                 for x in EURIndex_get_DealNumbers:
-                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = day):
+                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) > timedelta(days = day):
 
                         getPartners.append( FX133TradeData[41][x] )
                 j+=1
@@ -181,20 +182,30 @@ def trade_graph(d, themonth):
                 print(x, dict[x])
                 total_transactions = total_transactions+dict[x]
 
-            if day == 0:
-                print('["All FX Trades", ',total_transactions,', "grey", "',total_transactions,'"],',file = graph)
-            if day == 1:
-                print('["greater than ',day,' day", ',total_transactions,', "green", "',total_transactions,'"],',file = graph)
-            if day == 2:
-                print('["greater than ',day,' days", ',total_transactions,', "green", "',total_transactions,'"],',file = graph)
             if day == 3:
-                print('["greater than ',day,' days", ',total_transactions,', "yellow", "',total_transactions,'"],',file = graph)
+                print('["All FX Trades", ',total_transactions,', "grey", "',total_transactions,'"],',file = graph)
             if day == 4:
-                print('["greater than ',day,' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' day", ',total_transactions,', "green", "',total_transactions,'"],',file = graph)
             if day == 5:
-                print('["greater than ',day,' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "green", "',total_transactions,'"],',file = graph)
             if day == 6:
-                print('["greater than ',day,' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+                print('["greater than ',(day),' days", ',total_transactions,', "yellow", "',total_transactions,'"],',file = graph)
+            if day == 7:
+                print('["greater than ',(day),' days", ',total_transactions,', "yellow", "',total_transactions,'"],',file = graph)
+            if day == 8:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+            if day == 9:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+            if day == 10:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+            if day == 11:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+            if day == 12:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+            if day == 13:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
+            if day == 14:
+                print('["greater than ',(day),' days", ',total_transactions,', "red", "',total_transactions,'"],',file = graph)
 
 
         print(']);', file = graph)
@@ -227,6 +238,6 @@ def trade_graph(d, themonth):
         print('</body></html>', file = graph)
 
     graph.close()
-    for delete in files:
+    #for delete in files:
 
-        os.remove('files/'+delete)
+        #os.remove('files/'+delete)
