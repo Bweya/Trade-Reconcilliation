@@ -22,14 +22,6 @@ def trade(d, themonth):
             FX133TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
 
 
-    #TradeData = pd.read_excel("files/FX Trades-01-30Nov19.XLSX", sheet_name = 0, header = None, skiprows=1)
-    #HqTradeData = pd.read_excel("files/FX Trades HQ-01-30Nov19.XLSX", sheet_name = 0, header = None, skiprows=1)
-    #FX133TradeData = pd.read_excel("files/FX-133 Rpt-01-30Nov19.xls.xlsx", sheet_name = 0, header = None, skiprows=1)
-
-    #TradeData = pd.read_excel("files/FX Trades-01-31Oct19.XLSX", sheet_name = 0, header = None, skiprows=1)
-    #HqTradeData = pd.read_excel("files/FX Trades HQ-01-31Oct19.XLSX", sheet_name = 0, header = None, skiprows=1)
-    #FX133TradeData = pd.read_excel("files/FX Deals - 133Rpt-01-31Oct19.xls.xlsx", sheet_name = 0, header = None, skiprows=1)
-
     #Get indices of approved records
 
     approved_index = []
@@ -138,55 +130,7 @@ def trade(d, themonth):
                 usdIndex_get_DealNumbers.append(count_usd_index)
         count_usd_index+=1
 
-    #=======================XAF
-    #XAFstart_index = 0
-    #for x in FX133TradeData[0]:
-    #    if isinstance(x, float) == False and x[:3] == 'XAF':
-    #        break
-    #    XAFstart_index+=1
 
-    #XAFstop_index = 0
-
-    #for x in FX133TradeData[0]:
-    #    if XAFstop_index > XAFstart_index:
-    #        if isinstance(x, float) == False and x[:14] == 'Total Currency':
-    #            break;
-    #    XAFstop_index+=1
-
-    #XAFstart_index = XAFstart_index + 1
-
-    #XAFIndex_get_dealnumbers = []
-    #count_XAF_index = 0
-    #for x in FX133TradeData[48]:
-    #    if count_XAF_index > XAFstart_index and count_XAF_index < XAFstop_index:
-    #        if isinstance(x, int) == True:
-    #            XAFIndex_get_dealnumbers.append(count_XAF_index)
-    #    count_XAF_index+=1
-
-    #=======================XOF
-    #XOFstart_index = 0
-    #for x in FX133TradeData[0]:
-    #    if isinstance(x, float) == False and x[:3] == 'XOF':
-    #        break
-    #    XOFstart_index+=1
-
-    #XOFstop_index = 0
-
-    #for x in FX133TradeData[0]:
-    #    if XOFstop_index > XOFstart_index:
-    #        if isinstance(x, float) == False and x[:14] == 'Total Currency':
-    #            break;
-    #    XOFstop_index+=1
-
-    #XOFstart_index = XOFstart_index + 1
-
-    #XOFIndex_get_dealnumbers = []
-    #count_XOF_index = 0
-    #for x in FX133TradeData[48]:
-    #    if count_XOF_index > XOFstart_index and count_XOF_index < XOFstop_index:
-    #        if isinstance(x, int) == True:
-    #            XOFIndex_get_dealnumbers.append(count_XOF_index)
-    #    count_XOF_index+=1
 
     #======================GET DEALERS/TRADERS using dealnumbers
     #USD
@@ -196,12 +140,12 @@ def trade(d, themonth):
     with open(themonth+year+"_Report.csv", 'w') as output:
 
         trade_writer = csv.writer(output, delimiter = ',')
-        trade_writer.writerow(['Index','CO Request ID','Creation Date','FX Deal No','Deal Amount','Currency','Value Date HQ', 'Business Partner', filter_column,'Average number of days not received by CO', 'Trader' ] )
+        trade_writer.writerow(['CO Request ID','Creation Date','FX Deal No','Deal Amount','Currency','Value Date HQ', 'Business Partner', filter_column,'Average number of days not received by CO', 'Trader' ] )
         j = 0
         for y in DealNumber:
 
             for x in usdIndex_get_DealNumbers:
-                if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = d):
+                if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) >= timedelta(days = d):
                     #index_in_HQ.append(j+y+FX133TradeData[3][x])
                     trade_writer.writerow([ HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),((HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
                     ALL_indices.append(j)
@@ -209,7 +153,7 @@ def trade(d, themonth):
 
 
             for x in EURIndex_get_DealNumbers:
-                if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = d):
+                if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) >= timedelta(days = d):
 
                 #and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 0):
                     trade_writer.writerow([ HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),((HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])

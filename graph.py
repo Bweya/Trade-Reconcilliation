@@ -154,13 +154,13 @@ def trade_graph(d, thedays, themonth):
             for y in DealNumber:
 
                 for x in usdIndex_get_DealNumbers:
-                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) > timedelta(days = day):
+                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) >= timedelta(days = day):
 
                         getPartners.append( FX133TradeData[41][x] )
 
 
                 for x in EURIndex_get_DealNumbers:
-                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) > timedelta(days = day):
+                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) >= timedelta(days = day):
 
                         getPartners.append( FX133TradeData[41][x] )
                 j+=1
