@@ -256,7 +256,7 @@ def trade_graph(d, thedays, themonth, m):
 
         print(']);', file = graph)
         print('var options = {', file = graph)
-        print("title: 'Number of Transactions',", file = graph)
+        print("title: 'Number of approved FX Trades',", file = graph)
         print('height: 1000,', file = graph)
         print('width: 1600,', file = graph)
         print("legend: { position: 'none' },", file = graph)
@@ -286,7 +286,7 @@ def trade_graph(d, thedays, themonth, m):
         #print('<h3>Days Delivery </h3>', file = graph)
         print('<table>', file = graph)
 
-        print('<tr><td><strong>Delivery Days</strong></td><td><div style = "display:inline-block;" id="top_x_div"></div></td></tr>', file = graph)
+        print('<tr><td><strong>Delivery Days to CO</strong></td><td><div style = "display:inline-block;" id="top_x_div"></div></td></tr>', file = graph)
         print('</table>', file = graph)
 
         print('<table style="border:none">', file = graph)
