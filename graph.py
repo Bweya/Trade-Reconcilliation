@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import timedelta
 import datetime
 import os
-def trade_graph(d, thedays, themonth):
+def trade_graph(d, thedays, themonth, m):
 
     filter_column = 'Period after CO create date'
     DateNow = datetime.datetime.now()
@@ -147,8 +147,6 @@ def trade_graph(d, thedays, themonth):
 
         #======CALCULATE TOTAL NUMBER OF TRANSACTIONS======
 
-
-
         getPartners = []
 
         j = 0
@@ -194,17 +192,42 @@ def trade_graph(d, thedays, themonth):
             for y in DealNumber:
 
                 for x in usdIndex_get_DealNumbers:
-                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) == timedelta(days = day):
 
-                        getPartners.append( FX133TradeData[41][x] )
+                    date_133US = FX133TradeData[32][x].replace(".","/");
+                    date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
+
+
+                    if HqTradeData[15][j].month == m:
+
+                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) == timedelta(days = day):
+
+                            getPartners.append( FX133TradeData[41][x] )
+
+                    else:
+
+                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) + timedelta(days = 3) == timedelta(days = day):
+
+                            getPartners.append( FX133TradeData[41][x] )
+
 
 
                 for x in EURIndex_get_DealNumbers:
-                    if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days = 3) == timedelta(days = day):
+                    date_133EU = FX133TradeData[32][x].replace(".","/");
+                    date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
 
-                        getPartners.append( FX133TradeData[41][x] )
+                    if HqTradeData[15][j].month == m:
+
+                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j]) == timedelta(days = day):
+
+                            getPartners.append( FX133TradeData[41][x] )
+
+                    else:
+
+                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j])+timedelta(days = 3) == timedelta(days = day):
+
+                            getPartners.append( FX133TradeData[41][x] )
+
                 j+=1
-
 
 
             x = getPartners
@@ -222,40 +245,13 @@ def trade_graph(d, thedays, themonth):
                 print(x, dict[x])
                 total_transactions = total_transactions+dict[x]
 
-            if day == 0 and total_transactions != 0:
-                print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+            if total_transactions != 0:
 
-            if day == 1 and total_transactions != 0:
-                print('["',day,' day", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+                if day < 6:
+                    print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
 
-            if day == 2 and total_transactions != 0:
-                print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-
-            if day == 3 and total_transactions != 0:
-                print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-
-            if day == 4 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 5 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 6 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 7 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 8 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 9 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 10:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 11 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 12 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 13 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
-            if day == 14 and total_transactions != 0:
-                print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+                else:
+                    print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
 
 
         print(']);', file = graph)
@@ -292,11 +288,10 @@ def trade_graph(d, thedays, themonth):
 
         print('<tr><td><strong>Delivery Days</strong></td><td><div style = "display:inline-block;" id="top_x_div"></div></td></tr>', file = graph)
         print('</table>', file = graph)
-        
+
         print('<table style="border:none">', file = graph)
         print('<tr><td><strong>Key</strong></td><td></td></tr>', file = graph)
 
-        print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:grey"></div></td><td>All FX Trades ',thedays, themonth,' 2019</td>',file = graph)
         print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:green"></div></td><td>FX Trades delivered to CO within 5 days</td>',file = graph)
 
         print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:red"></div></td><td>FX Trades delivered to CO after 5 days onwards</td>',file = graph)
