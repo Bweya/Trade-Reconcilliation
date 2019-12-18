@@ -1,9 +1,10 @@
 import pandas as pd
 import csv
 from datetime import timedelta
+
 import datetime
 import os
-def trade(d, themonth):
+def trade(d, themonth, m):
     filter_column = 'Period after CO create date'
     DateNow = datetime.datetime.now()
     day = DateNow.strftime("%d")
@@ -140,25 +141,44 @@ def trade(d, themonth):
     with open(themonth+year+"_Report.csv", 'w') as output:
 
         trade_writer = csv.writer(output, delimiter = ',')
-        trade_writer.writerow(['CO Request ID','Creation Date','FX Deal No','Deal Amount','Currency','Value Date HQ', 'Business Partner', filter_column,'Average number of days not received by CO', 'Trader' ] )
+        trade_writer.writerow(['A','B','C','D','E','F','G', 'H', 'I', 'J','K', 'L' ] )
+        trade_writer.writerow(['Index','CO Request ID','Creation Date','FX Deal No','Deal Amount','Currency','Value Date HQ', 'Value Date 133', 'Business Partner', filter_column,'Add 3 days number; Average number of days not received by CO', 'Trader' ] )
         j = 0
+        count_record = 1
         for y in DealNumber:
 
             for x in usdIndex_get_DealNumbers:
-                if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) >= timedelta(days = d):
-                    #index_in_HQ.append(j+y+FX133TradeData[3][x])
-                    trade_writer.writerow([ HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),((HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
-                    ALL_indices.append(j)
-                    getPartners.append( FX133TradeData[41][x] )
+                date_133US = FX133TradeData[32][x].replace(".","/");
+                date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
+                if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) >= timedelta(days = d):
+                    if HqTradeData[15][j].month == m:
+                        trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],date_133USobj,FX133TradeData[41][x],(date_133USobj-HqTradeData[15][j]),((date_133USobj-HqTradeData[15][j])),FX133TradeData[3][x] ])
+                        #print(HqTradeData[0][j], TradeData[9][approved_index[j]]-date_133USobj,' : ',HqTradeData[7][j][:3])
+                        ALL_indices.append(j)
+                        getPartners.append( FX133TradeData[41][x] )
+                        count_record+=1
 
+                    else:
+                        trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],date_133USobj ,FX133TradeData[41][x],(date_133USobj-HqTradeData[15][j]),((date_133USobj-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
+                        #print(HqTradeData[0][j], TradeData[9][approved_index[j]]-date_133USobj,' : ',HqTradeData[7][j][:3])
+                        ALL_indices.append(j)
+                        getPartners.append( FX133TradeData[41][x] )
+                        count_record+=1
 
             for x in EURIndex_get_DealNumbers:
-                if y == FX133TradeData[48][x] and (HqTradeData[8][j]-HqTradeData[15][j]) >= timedelta(days = d):
-
-                #and (HqTradeData[8][j]-HqTradeData[15][j]) > timedelta(days = 0):
-                    trade_writer.writerow([ HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],FX133TradeData[41][x],(HqTradeData[8][j]-HqTradeData[15][j]),((HqTradeData[8][j]-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
-                    ALL_indices.append(j)
-                    getPartners.append( FX133TradeData[41][x] )
+                date_133EU = FX133TradeData[32][x].replace(".","/");
+                date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
+                if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j]) >= timedelta(days = d):
+                    if HqTradeData[15][j].month == m:
+                        trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],date_133EUobj,FX133TradeData[41][x],(date_133EUobj-HqTradeData[15][j]),((date_133EUobj-HqTradeData[15][j])),FX133TradeData[3][x] ])
+                        ALL_indices.append(j)
+                        getPartners.append( FX133TradeData[41][x] )
+                        count_record+=1
+                    else:
+                        trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],date_133EUobj,FX133TradeData[41][x],(date_133EUobj-HqTradeData[15][j]),((date_133EUobj-HqTradeData[15][j])+timedelta(days=3)),FX133TradeData[3][x] ])
+                        ALL_indices.append(j)
+                        getPartners.append( FX133TradeData[41][x] )
+                        count_record+=1
 
 
             j+=1
@@ -192,6 +212,8 @@ def trade(d, themonth):
         print(x, dict[x])
         total_transactions = total_transactions+dict[x]
     print('\n', 'The total number of transactions equals:',total_transactions)
+
+
 
 
 
