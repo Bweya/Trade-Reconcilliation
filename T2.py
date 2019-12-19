@@ -4,7 +4,7 @@ from datetime import timedelta
 
 import datetime
 import os
-def trade(d, themonth, m):
+def trade(d):
     filter_column = 'Period after CO create date'
     DateNow = datetime.datetime.now()
     day = DateNow.strftime("%d")
@@ -17,11 +17,14 @@ def trade(d, themonth, m):
     for f in files:
         if f[:10] == 'FX Trades-':
             TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+
         if f[:12] == 'FX Trades HQ':
             HqTradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+            getmonth = f[18:-7]
         if f[:6] == 'FX-133':
             FX133TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
 
+    month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
 
     #Get indices of approved records
 
@@ -131,14 +134,12 @@ def trade(d, themonth, m):
                 usdIndex_get_DealNumbers.append(count_usd_index)
         count_usd_index+=1
 
-
-
     #======================GET DEALERS/TRADERS using dealnumbers
     #USD
     #USD_dealers = []
     ALL_indices = []
     getPartners = []
-    with open(themonth+year+"_Report.csv", 'w') as output:
+    with open(getmonth.upper()+year+"_Report.csv", 'w') as output:
 
         trade_writer = csv.writer(output, delimiter = ',')
         trade_writer.writerow(['A','B','C','D','E','F','G', 'H', 'I', 'J','K', 'L' ] )
@@ -151,7 +152,7 @@ def trade(d, themonth, m):
                 date_133US = FX133TradeData[32][x].replace(".","/");
                 date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
                 if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) >= timedelta(days = d):
-                    if HqTradeData[15][j].month == m:
+                    if HqTradeData[15][j].month == (month_dict[getmonth] - 1):
                         trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],date_133USobj,FX133TradeData[41][x],(date_133USobj-HqTradeData[15][j]),((date_133USobj-HqTradeData[15][j])),FX133TradeData[3][x] ])
                         #print(HqTradeData[0][j], TradeData[9][approved_index[j]]-date_133USobj,' : ',HqTradeData[7][j][:3])
                         ALL_indices.append(j)
@@ -169,7 +170,7 @@ def trade(d, themonth, m):
                 date_133EU = FX133TradeData[32][x].replace(".","/");
                 date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
                 if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j]) >= timedelta(days = d):
-                    if HqTradeData[15][j].month == m:
+                    if HqTradeData[15][j].month == (month_dict[getmonth] - 1):
                         trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j],str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],TradeData[9][approved_index[j]],date_133EUobj,FX133TradeData[41][x],(date_133EUobj-HqTradeData[15][j]),((date_133EUobj-HqTradeData[15][j])),FX133TradeData[3][x] ])
                         ALL_indices.append(j)
                         getPartners.append( FX133TradeData[41][x] )
