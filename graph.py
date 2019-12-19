@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import timedelta
 import datetime
 import os
-def trade_graph(d, thedays, themonth, m):
+def trade_graph(d, thedays):
 
     filter_column = 'Period after CO create date'
     DateNow = datetime.datetime.now()
@@ -20,8 +20,11 @@ def trade_graph(d, thedays, themonth, m):
             TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
         if f[:12] == 'FX Trades HQ':
             HqTradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+            getmonth = f[18:-7]
         if f[:6] == 'FX-133':
             FX133TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
+
+    month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
 
 
 
@@ -132,7 +135,7 @@ def trade_graph(d, thedays, themonth, m):
         count_usd_index+=1
 
 
-    with open(themonth+year+'_Graph.html', 'w') as graph:
+    with open(getmonth.upper()+year+'_Graph.html', 'w') as graph:
         print('<!DOCTYPE html>', file = graph)
         print("<html lang ='en' dir='ltr'>", file = graph)
         print('<head><meta charset="utf-8">', file = graph)
@@ -197,7 +200,7 @@ def trade_graph(d, thedays, themonth, m):
                     date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
 
 
-                    if HqTradeData[15][j].month == m:
+                    if HqTradeData[15][j].month == (month_dict[getmonth] - 1):
 
                         if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) == timedelta(days = day):
 
@@ -215,7 +218,7 @@ def trade_graph(d, thedays, themonth, m):
                     date_133EU = FX133TradeData[32][x].replace(".","/");
                     date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
 
-                    if HqTradeData[15][j].month == m:
+                    if HqTradeData[15][j].month == (month_dict[getmonth] - 1):
 
                         if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j]) == timedelta(days = day):
 
@@ -282,7 +285,7 @@ def trade_graph(d, thedays, themonth, m):
         print("</style>", file = graph)
         print("</head>", file = graph)
         print('<body>', file = graph)
-        print('<h2>FX Trades ',thedays, themonth,' 2019 Days Delivery To CO</h2>', file = graph)
+        print('<h2>FX Trades ',thedays, getmonth, year,' Days Delivery To CO</h2>', file = graph)
         #print('<h3>Days Delivery </h3>', file = graph)
         print('<table>', file = graph)
 
