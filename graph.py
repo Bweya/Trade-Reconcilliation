@@ -3,7 +3,9 @@ import pandas as pd
 from datetime import timedelta
 import datetime
 import os
-def trade_graph(d, thedays):
+import calendar
+
+def trade_graph(d):
 
     filter_column = 'Period after CO create date'
     DateNow = datetime.datetime.now()
@@ -24,7 +26,7 @@ def trade_graph(d, thedays):
         if f[:6] == 'FX-133':
             FX133TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
 
-    month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'Jun':6, 'Jul':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
+    month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'June':6, 'July':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
 
 
 
@@ -187,7 +189,7 @@ def trade_graph(d, thedays):
 
 
 
-        for day in range(0,d+1):
+        for day in range(-d,d+1):
 
             getPartners = []
 
@@ -198,37 +200,69 @@ def trade_graph(d, thedays):
 
                     date_133US = FX133TradeData[32][x].replace(".","/");
                     date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
+                    periodUS = date_133USobj-TradeData[9][approved_index[j]]
 
+                    if month_dict[getmonth] == 1:
 
-                    if HqTradeData[15][j].month == (month_dict[getmonth] - 1):
+                        if TradeData[9][approved_index[j]].month == 12:
 
-                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) == timedelta(days = day):
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodUS) == timedelta(days = day):
 
-                            getPartners.append( FX133TradeData[41][x] )
+                                getPartners.append( FX133TradeData[41][x] )
 
+                        else:
+
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodUS) + timedelta(days = 3) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
                     else:
 
-                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133USobj-HqTradeData[15][j]) + timedelta(days = 3) == timedelta(days = day):
+                        if TradeData[9][approved_index[j]].month == (month_dict[getmonth] - 1):
 
-                            getPartners.append( FX133TradeData[41][x] )
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodUS) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
+
+                        else:
+
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodUS) + timedelta(days = 3) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
 
 
 
                 for x in EURIndex_get_DealNumbers:
                     date_133EU = FX133TradeData[32][x].replace(".","/");
                     date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
+                    periodEU = date_133EUobj-TradeData[9][approved_index[j]]
 
-                    if HqTradeData[15][j].month == (month_dict[getmonth] - 1):
+                    if month_dict[getmonth] == 1:
 
-                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j]) == timedelta(days = day):
+                        if TradeData[9][approved_index[j]].month == 12:
 
-                            getPartners.append( FX133TradeData[41][x] )
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodEU) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
+
+                        else:
+
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodEU)+timedelta(days = 3) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
 
                     else:
 
-                        if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (date_133EUobj-HqTradeData[15][j])+timedelta(days = 3) == timedelta(days = day):
+                        if TradeData[9][approved_index[j]].month == (month_dict[getmonth] - 1):
 
-                            getPartners.append( FX133TradeData[41][x] )
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodEU) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
+
+                        else:
+
+                            if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK' and (periodEU)+timedelta(days = 3) == timedelta(days = day):
+
+                                getPartners.append( FX133TradeData[41][x] )
 
                 j+=1
 
@@ -251,9 +285,18 @@ def trade_graph(d, thedays):
             if total_transactions != 0:
 
                 if day < 6:
-                    print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+
+                    if day == 1 or day == -1:
+
+                        print('["',day,' day", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+
+                    else:
+
+                        print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
 
                 else:
+
+
                     print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
 
 
@@ -285,7 +328,7 @@ def trade_graph(d, thedays):
         print("</style>", file = graph)
         print("</head>", file = graph)
         print('<body>', file = graph)
-        print('<h2>FX Trades ',thedays, getmonth, year,' Days Delivery To CO</h2>', file = graph)
+        print('<h2>FX Trades 1-',calendar.monthrange(int(year), month_dict[getmonth])[1], getmonth, year,' Days Delivery To CO</h2>', file = graph)
         #print('<h3>Days Delivery </h3>', file = graph)
         print('<table>', file = graph)
 
@@ -303,5 +346,6 @@ def trade_graph(d, thedays):
 
     graph.close()
     for delete in files:
+
 
         os.remove('files/'+delete)
