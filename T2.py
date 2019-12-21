@@ -142,7 +142,7 @@ def trade():
 
         trade_writer = csv.writer(output, delimiter = ',')
         trade_writer.writerow(['A','B','C','D','E','F','G', 'H', 'I', 'J','K', 'L' ] )
-        trade_writer.writerow(['Item No.','CO Request ID','Creation Date','Value Date CO','FX Deal No','Deal Amount','Currency', 'Value Date HQ', 'Business Partner', filter_column,'Add 3 days number; Average number of days not received by CO', 'Trader' ] )
+        trade_writer.writerow(['Item No.','CO Request ID','Creation Date','Value Date CO','FX Deal No','Deal Amount','Currency', 'Value Date HQ', 'Business Partner', filter_column,'Add average 3 days not received by CO', 'Trader' ] )
         j = 0
         count_record = 1
         for y in DealNumber:
