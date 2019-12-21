@@ -180,9 +180,13 @@ def trade_graph(d):
             dict[p] = count
 
         final_transactions = 0
+        print('\n')
         for x in dict:
             print(x, dict[x])
             final_transactions = final_transactions+dict[x]
+        print('\n')
+        print('Total number of Transactions: ', final_transactions)
+        print('\n')
 
 
         #=====END TOTAL NUMBER OF TRANSACTIONS====
@@ -279,7 +283,7 @@ def trade_graph(d):
 
             total_transactions = 0
             for x in dict:
-                print(x, dict[x])
+                #print(x, dict[x])
                 total_transactions = total_transactions+dict[x]
 
             if total_transactions != 0:
