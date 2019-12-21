@@ -158,13 +158,13 @@ def trade_graph(d):
         for y in DealNumber:
 
             for x in usdIndex_get_DealNumbers:
-                if y == FX133TradeData[48][x]:
+                if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                     getPartners.append( FX133TradeData[41][x] )
 
 
             for x in EURIndex_get_DealNumbers:
-                if y == FX133TradeData[48][x]:
+                if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                     getPartners.append( FX133TradeData[41][x] )
             j+=1
@@ -288,16 +288,16 @@ def trade_graph(d):
 
                     if day == 1 or day == -1:
 
-                        print('["',day,' day", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+                        print('["',day,' day", ',total_transactions,', "green", "',round((total_transactions/final_transactions)*100),'%"],',file = graph)
 
                     else:
 
-                        print('["',day,' days", ',total_transactions,', "green", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+                        print('["',day,' days", ',total_transactions,', "green", "',round((total_transactions/final_transactions)*100),'%"],',file = graph)
 
                 else:
 
 
-                    print('["',(day),' days", ',total_transactions,', "red", "',"{:.0f}".format((total_transactions/final_transactions)*100),'%"],',file = graph)
+                    print('["',(day),' days", ',total_transactions,', "red", "',round((total_transactions/final_transactions)*100),'%"],',file = graph)
 
 
         print(']);', file = graph)
