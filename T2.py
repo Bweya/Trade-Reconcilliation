@@ -7,10 +7,8 @@ import os
 def trade():
     filter_column = 'Period after CO value date'
     DateNow = datetime.datetime.now()
-    day = DateNow.strftime("%d")
-    month = DateNow.strftime("%b")
+
     year = DateNow.strftime("%Y")
-    current_date = day + "_" + month + "_" + year
 
     files = os.listdir('files')
 
@@ -134,15 +132,14 @@ def trade():
         count_usd_index+=1
 
     #======================GET DEALERS/TRADERS using dealnumbers
-    #USD
-    #USD_dealers = []
+
     ALL_indices = []
     getPartners = []
     with open(getmonth.upper()+year+"_Report.csv", 'w') as output:
 
         trade_writer = csv.writer(output, delimiter = ',')
         trade_writer.writerow(['A','B','C','D','E','F','G', 'H', 'I', 'J','K', 'L' ] )
-        trade_writer.writerow(['Item No.','CO Request ID','Creation Date','Value Date CO','FX Deal No','Deal Amount','Currency', 'Value Date HQ', 'Business Partner', filter_column,'Add average 3 days not received by CO', 'Trader' ] )
+        trade_writer.writerow(['Item No.','CO Request ID','Creation Date','Value Date CO','FX Deal No','Deal Amount','Currency', 'Value Date HQ', 'Business Partner', filter_column,'Add 3 average days not received by CO', 'Trader' ] )
         j = 0
         count_record = 1
         for y in DealNumber:
@@ -155,6 +152,7 @@ def trade():
                     periodUS = (date_133USobj-TradeData[9][approved_index[j]]).days
                     if month_dict[getmonth] == 1:
                         if TradeData[9][approved_index[j]].month == 12:
+
                             trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j].date(),TradeData[9][approved_index[j]].date(),str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],date_133USobj.date(),FX133TradeData[41][x],str(periodUS)+' days',str(periodUS)+' days',FX133TradeData[3][x] ])
                             #print(HqTradeData[0][j], TradeData[9][approved_index[j]]-date_133USobj,' : ',HqTradeData[7][j][:3])
                             ALL_indices.append(j)
@@ -191,6 +189,8 @@ def trade():
                     if month_dict[getmonth] == 1:
 
                         if TradeData[9][approved_index[j]].month == 12:
+
+
                             trade_writer.writerow([count_record, HqTradeData[0][j],HqTradeData[15][j].date(),TradeData[9][approved_index[j]].date(),str(y),"{:,.2f}".format(HqTradeData[9][j]),HqTradeData[7][j],date_133EUobj.date(),FX133TradeData[41][x],str(periodEU)+' days',str(periodEU)+' days',FX133TradeData[3][x] ])
                             ALL_indices.append(j)
                             getPartners.append( FX133TradeData[41][x] )
@@ -217,7 +217,7 @@ def trade():
     output.close()
     #for delete in files:
 
-    #    os.remove('files/'+delete);
+        #os.remove('files/'+delete);
 
     missing_indices = []
     for y in range( 0, (ALL_indices[-1] + 1) ):
