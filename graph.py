@@ -205,7 +205,7 @@ def trade_graph(d):
                     date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
                     periodUS = date_133USobj-TradeData[9][approved_index[j]]
 
-                    if (date_133USobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5:
+                    if (date_133USobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5 and (date_133USobj.date()) > (TradeData[9][approved_index[j]].date()):
 
                         periodUS = periodUS-timedelta(days = 2)
 
@@ -242,7 +242,7 @@ def trade_graph(d):
                     date_133EU = FX133TradeData[32][x].replace(".","/");
                     date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
                     periodEU = date_133EUobj-TradeData[9][approved_index[j]]
-                    if (date_133EUobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5:
+                    if (date_133EUobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5 and (date_133EUobj.date()) > (TradeData[9][approved_index[j]].date()):
 
                         periodEU = periodEU-timedelta(days = 2)
 
