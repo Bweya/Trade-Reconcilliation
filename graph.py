@@ -11,9 +11,9 @@ def trade_graph(d):
     DateNow = datetime.datetime.now()
     day = DateNow.strftime("%d")
     month = DateNow.strftime("%b")
-    year = DateNow.strftime("%Y")
+    year = '2019'
     current_period = month+year
-
+    
 
     files = os.listdir('files')
 
@@ -158,6 +158,7 @@ def trade_graph(d):
         for y in DealNumber:
 
             for x in usdIndex_get_DealNumbers:
+
                 if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                     getPartners.append( FX133TradeData[41][x] )
@@ -191,8 +192,6 @@ def trade_graph(d):
 
         #=====END TOTAL NUMBER OF TRANSACTIONS====
 
-
-
         for day in range(-d,d+1):
 
             getPartners = []
@@ -205,6 +204,10 @@ def trade_graph(d):
                     date_133US = FX133TradeData[32][x].replace(".","/");
                     date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
                     periodUS = date_133USobj-TradeData[9][approved_index[j]]
+
+                    if (TradeData[9][approved_index[j]].date()).strftime('%A') == 'Friday':
+
+                        periodUS = periodUS-timedelta(days = 2)
 
                     if month_dict[getmonth] == 1:
 
@@ -239,6 +242,9 @@ def trade_graph(d):
                     date_133EU = FX133TradeData[32][x].replace(".","/");
                     date_133EUobj = datetime.datetime.strptime(date_133EU, '%d/%m/%Y')
                     periodEU = date_133EUobj-TradeData[9][approved_index[j]]
+                    if (TradeData[9][approved_index[j]].date()).strftime('%A') == 'Friday':
+
+                        periodEU = periodEU-timedelta(days = 2)
 
                     if month_dict[getmonth] == 1:
 
@@ -349,7 +355,7 @@ def trade_graph(d):
         print('</body></html>', file = graph)
 
     graph.close()
-    for delete in files:
+    #for delete in files:
 
 
-        os.remove('files/'+delete)
+        #os.remove('files/'+delete)
