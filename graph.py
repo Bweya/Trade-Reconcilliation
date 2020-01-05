@@ -13,7 +13,7 @@ def trade_graph(d):
     month = DateNow.strftime("%b")
     year = '2019'
     current_period = month+year
-    
+
 
     files = os.listdir('files')
 
@@ -355,7 +355,7 @@ def trade_graph(d):
         print('</body></html>', file = graph)
 
     graph.close()
-    #for delete in files:
+    for delete in files:
 
 
-        #os.remove('files/'+delete)
+        os.remove('files/'+delete)
