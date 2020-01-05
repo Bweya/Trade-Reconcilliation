@@ -195,7 +195,7 @@ def trade():
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                 periodUS = (date_133USobj-TradeData[9][approved_index[j]]).days
-                if (date_133USobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5 and (date_133USobj.date()).isocalender()[1] > (TradeData[9][approved_index[j]].date()).isocalender()[1]:
+                if (date_133USobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5 and (date_133USobj.date()).isocalendar()[1] > (TradeData[9][approved_index[j]].date()).isocalendar()[1]:
                     #print( 'Day of the week', TradeData[9][approved_index[j]].date().weekday() )
 
                     periodUS = periodUS-2
@@ -308,7 +308,7 @@ def trade():
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                 periodEU = (date_133EUobj-TradeData[9][approved_index[j]]).days
-                if (date_133EUobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5 and (date_133EUobj.date()).isocalender()[1] > (TradeData[9][approved_index[j]].date()).isocalender()[1]:
+                if (date_133EUobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5 and (date_133EUobj.date()).isocalendar()[1] > (TradeData[9][approved_index[j]].date()).isocalendar()[1]:
 
                     periodEU = periodEU-2
                 if(periodEU+3) > 5:
