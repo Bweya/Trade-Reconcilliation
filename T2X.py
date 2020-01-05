@@ -194,9 +194,9 @@ def trade():
             #print( 'The Day is', (date_133USobj.date()).strftime('%A') );
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
-                #and (TradeData[9][approved_index[j]]-date_133USobj) >= timedelta(days = d):
                 periodUS = (date_133USobj-TradeData[9][approved_index[j]]).days
-                if (TradeData[9][approved_index[j]].date()).strftime('%A') == 'Friday':
+                if (date_133USobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5:
+                    #print( 'Day of the week', TradeData[9][approved_index[j]].date().weekday() )
 
                     periodUS = periodUS-2
 
@@ -308,7 +308,7 @@ def trade():
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                 periodEU = (date_133EUobj-TradeData[9][approved_index[j]]).days
-                if (TradeData[9][approved_index[j]].date()).strftime('%A') == 'Friday':
+                if (date_133EUobj.date()).weekday() >= 0 and (TradeData[9][approved_index[j]].date()).weekday() < 5:
 
                     periodEU = periodEU-2
                 if(periodEU+3) > 5:
