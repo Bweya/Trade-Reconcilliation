@@ -11,7 +11,7 @@ def trade():
     filter_column = 'Period after CO value date'
     DateNow = datetime.datetime.now()
 
-    year = DateNow.strftime("%Y")
+    year = '2019'
 
 
     files = os.listdir('files')
@@ -191,9 +191,15 @@ def trade():
         for x in usdIndex_get_DealNumbers:
             date_133US = FX133TradeData[32][x].replace(".","/");
             date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
+            #print( 'The Day is', (date_133USobj.date()).strftime('%A') );
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
+
                 #and (TradeData[9][approved_index[j]]-date_133USobj) >= timedelta(days = d):
                 periodUS = (date_133USobj-TradeData[9][approved_index[j]]).days
+                if (TradeData[9][approved_index[j]].date()).strftime('%A') == 'Friday':
+
+                    periodUS = periodUS-2
+
                 if(periodUS+3) > 5:
                     the_columns = workbook.add_format({'align':'center', 'bg_color': '#ffff00', 'border': 1})
                     date_format = workbook.add_format({'num_format': 'mm/dd/yy', 'align':'center', 'bg_color': '#ffff00', 'border': 1})
@@ -222,7 +228,7 @@ def trade():
                         worksheet.write('K'+str(row_record), str(periodUS)+' days', the_columns)
                         worksheet.write('L'+str(row_record), FX133TradeData[3][x], the_columns)
 
-                        
+
                         ALL_indices.append(j)
                         getPartners.append( FX133TradeData[41][x] )
                         count_record+=1
@@ -302,6 +308,9 @@ def trade():
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
 
                 periodEU = (date_133EUobj-TradeData[9][approved_index[j]]).days
+                if (TradeData[9][approved_index[j]].date()).strftime('%A') == 'Friday':
+
+                    periodEU = periodEU-2
                 if(periodEU+3) > 5:
                     the_columns = workbook.add_format({'align':'center', 'bg_color': '#ffff00', 'border': 1})
                     date_format = workbook.add_format({'num_format': 'mm/dd/yy', 'align':'center', 'bg_color': '#ffff00', 'border': 1})
