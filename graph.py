@@ -312,7 +312,7 @@ def trade_graph(d):
 
         print(']);', file = graph)
         print('var options = {', file = graph)
-        print("title: 'Number of approved FX Trades',", file = graph)
+        print("title: 'UNICEF Country Offices FX Trade Delivery Days 01 JAN - 31 DEC 2019',", file = graph)
         print('height: 1000,', file = graph)
         print('width: 1600,', file = graph)
         print("legend: { position: 'none' },", file = graph)
@@ -352,6 +352,7 @@ def trade_graph(d):
 
         print('<tr><td><div style="display:inline-block; width:50px; height:50px; background-color:red"></div></td><td>FX Trades delivered to CO after 5 days onwards</td>',file = graph)
         print('</table>', file = graph)
+        print('<p><strong>Compiled by: Louisa Tinga - Treasury Unit</strong></p>', file = graph)
         print('</body></html>', file = graph)
 
     graph.close()
