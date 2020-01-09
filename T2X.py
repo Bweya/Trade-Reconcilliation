@@ -33,6 +33,8 @@ def trade():
     worksheet = workbook.add_worksheet()
     bold = workbook.add_format({'bold': True, 'align':'center', 'bg_color':'#A9A9A9', 'border': 1})
 
+    #bold_footer = workbook.add_format({'bold': True, 'align':'left', 'font_size':18, 'border': 1})
+
 
     bolds = workbook.add_format({'bold': True, 'font_size':18, 'border': 1})
 
@@ -189,7 +191,7 @@ def trade():
     for y in DealNumber:
 
         for x in usdIndex_get_DealNumbers:
-            date_133US = FX133TradeData[32][x].replace(".","/");
+            date_133US = FX133TradeData[32][x].replace(".","/")
             date_133USobj = datetime.datetime.strptime(date_133US, '%d/%m/%Y')
             #print( 'The Day is', (date_133USobj.date()).strftime('%A') );
             if y == FX133TradeData[48][x] and HqTradeData[7][j][:3] != 'DKK':
@@ -406,6 +408,7 @@ def trade():
 
 
         j+=1
+    worksheet.merge_range('J'+str(row_record+1)+':L'+str(row_record+1), "Compiled by: Louisa Tinga - Treasury Unit")
 
     #for delete in files:
 
