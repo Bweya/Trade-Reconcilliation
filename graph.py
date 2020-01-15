@@ -148,7 +148,7 @@ def trade_graph(d):
         print('google.charts.setOnLoadCallback(drawStuff);', file = graph)
         print('function drawStuff() {', file = graph)
         print('var data = new google.visualization.arrayToDataTable([', file = graph)
-        print("['Days', 'Number of Transactions', {role:'style'}, {role : 'annotation'}],", file = graph)
+        print("['Days', 'Number of FX Trades', {role:'style'}, {role : 'annotation'}],", file = graph)
 
         #======CALCULATE TOTAL NUMBER OF TRANSACTIONS======
 
@@ -312,7 +312,7 @@ def trade_graph(d):
 
         print(']);', file = graph)
         print('var options = {', file = graph)
-        print("title: 'UNICEF Country Offices FX Trade Delivery Days 01 JAN - 31 DEC 2019',", file = graph)
+        print("title: 'Number of FX Trades',", file = graph)
         print('height: 1000,', file = graph)
         print('width: 1600,', file = graph)
         print("legend: { position: 'none' },", file = graph)
@@ -338,7 +338,7 @@ def trade_graph(d):
         print("</style>", file = graph)
         print("</head>", file = graph)
         print('<body>', file = graph)
-        print('<h2>FX Trades 1-',calendar.monthrange(int(year), month_dict[getmonth])[1], getmonth, year,' Days Delivery To CO</h2>', file = graph)
+        print("<h2>FX Trades  01 - ",calendar.monthrange(int(year), month_dict[getmonth])[1], getmonth, year," Days Delivery To CO</h2>", file = graph)
         #print('<h3>Days Delivery </h3>', file = graph)
         print('<table>', file = graph)
 
