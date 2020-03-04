@@ -7,15 +7,15 @@ import calendar
 
 def trade():
 
-    #month = datetime.datetime.now().month
+    month = (datetime.datetime.now().month)-1
     year = datetime.datetime.now().year
     month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'June':6, 'July':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
 
     k = list(month_dict.keys())
     v = list(month_dict.values())
-    #getmonth = k[v.index(month)]
-    getmonth = 'Jan'
-    month = 1
+    getmonth = k[v.index(month)]
+    #getmonth = 'Jan'
+    #month = 1
 
     workbook = xlsxwriter.Workbook(str(getmonth).upper()+str(year)+"_Report.xlsx")
     worksheet = workbook.add_worksheet()
@@ -62,7 +62,7 @@ def trade():
     files = os.listdir('files')
 
     for f in files:
-        if f[:7] == 'FX -133':
+        if f[:6] == 'FX-133':
             FX133 = pd.read_excel('files/'+f, sheet_name = 0, header = None, skiprows = 1)
         #if f[:9] == 'FX Trades':
         #    FXtrades = pd.read_excel('files/'+f, sheet_name = 0, header = None, skiprows = 1)
