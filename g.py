@@ -8,13 +8,18 @@ import calendar
 def trade_graph(d):
 
     filter_column = 'Period after CO create date'
-    DateNow = datetime.datetime.now()
-    day = DateNow.strftime("%d")
-    month = DateNow.strftime("%b")
-    year = '2019'
-    current_period = month+year
+    #DateNow = datetime.datetime.now()
 
-    getmonth = 'Jan'
+    month = (datetime.datetime.now().month)-1
+    year = datetime.datetime.now().year
+
+
+    #day = DateNow.strftime("%d")
+    #month = DateNow.strftime("%b")
+    #year = '2020'
+    #current_period = month+year
+
+    #getmonth = 'Jan'
 
     files = os.listdir('files')
 
@@ -24,10 +29,14 @@ def trade_graph(d):
         if f[:12] == 'FX Trades HQ':
             HqTradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
             #getmonth = f[18:-7]
-        if f[:7] == 'FX -133':
+        if f[:6] == 'FX-133':
             FX133TradeData = pd.read_excel("files/"+f, sheet_name = 0, header = None, skiprows=1)
 
     month_dict = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4, 'May':5, 'June':6, 'July':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
+
+    k = list(month_dict.keys())
+    v = list(month_dict.values())
+    getmonth = k[v.index(month)]
 
     TradeRequestID = []#trade id in FX_Trades file
 
@@ -113,7 +122,7 @@ def trade_graph(d):
         count_usd_index+=1
 
 
-    with open(getmonth.upper()+year+'_Graph.html', 'w') as graph:
+    with open(getmonth.upper()+str(year)+'_Graph.html', 'w') as graph:
         print('<!DOCTYPE html>', file = graph)
         print("<html lang ='en' dir='ltr'>", file = graph)
         print('<head><meta charset="utf-8">', file = graph)
